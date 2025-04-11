@@ -5,11 +5,18 @@ from io import BytesIO
 from kafka import KafkaConsumer, KafkaProducer
 from kafka.admin import KafkaAdminClient, NewTopic
 import json
+from db_connection import Resources
+import records
+import db_connection
+
 import os
 import time
+# db_instance = records.Database('postgresql://postgres:postgres@localhost:5432/data_flow')
+data_resources = Resources(db_resource_url='postgresql://postgres:postgres@localhost:5432/data_flow')
 
+config_map = data_resources.resource_value_retrieval()
 API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base"
-headers = {"Authorization": f"Bearer {os.getenv('HF_TOKEN', '')}"}
+headers = {"Authorization": f"Bearer {config_map['hf_url_config']}"}
 
 KAFKA_BROKER = 'localhost:9092'
 INPUT_TOPIC = 'image-prompts'

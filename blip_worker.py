@@ -5,17 +5,23 @@ from io import BytesIO
 from kafka import KafkaConsumer, KafkaProducer
 from kafka.admin import KafkaAdminClient, NewTopic
 import json
+from db_connection import Resources
+import records
+import db_connection
+
 import os
 import time
+# db_instance = records.Database('postgresql://postgres:postgres@localhost:5432/data_flow')
+data_resources = Resources(db_resource_url='postgresql://postgres:postgres@localhost:5432/data_flow')
 
-# Hugging Face API settings
+config_map = data_resources.resource_value_retrieval()
 API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base"
-headers = {"Authorization": f"Bearer {os.getenv('HF_TOKEN', '')}"}
+headers = {"Authorization": f"Bearer {config_map['hf_url_config']}"}
 
-# Kafka settings
 KAFKA_BROKER = 'localhost:9092'
 INPUT_TOPIC = 'image-prompts'
 OUTPUT_TOPIC = 'inference-results'
+
 
 def image_to_base64(image_path):
     try:
@@ -26,6 +32,7 @@ def image_to_base64(image_path):
     except Exception as e:
         print(f"[ERROR] Unable to open image {image_path}: {e}")
         return None
+
 
 def run_blip_inference(image_path: str) -> str:
     image_base64 = image_to_base64(image_path)
@@ -43,6 +50,7 @@ def run_blip_inference(image_path: str) -> str:
     except Exception as e:
         return f"API request failed: {e}"
 
+
 def ensure_topic_exists(topic_name: str, broker: str):
     try:
         admin = KafkaAdminClient(bootstrap_servers=broker)
@@ -52,6 +60,7 @@ def ensure_topic_exists(topic_name: str, broker: str):
         admin.close()
     except Exception as e:
         print(f"[ERROR] Could not ensure topic '{topic_name}': {e}")
+
 
 def main():
     ensure_topic_exists(INPUT_TOPIC, KAFKA_BROKER)
@@ -71,10 +80,10 @@ def main():
         value_serializer=lambda m: json.dumps(m).encode('utf-8')
     )
 
-    print("🟢 BLIP worker running... Polling Kafka every 1s.")
+    print("🟢 BLIP worker running...")
 
     while True:
-        msg_pack = consumer.poll(timeout_ms=1000)
+        msg_pack = consumer.poll(timeout_ms=10000)
         if not msg_pack:
             print("⏳ No new messages. Still waiting...")
             continue

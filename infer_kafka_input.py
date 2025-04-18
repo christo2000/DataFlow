@@ -24,5 +24,6 @@ def main():
     prompt = "what is happening in the image?"
     publish_image_prompt(image_path, prompt)
 
+
 if __name__ == "__main__":
     main()

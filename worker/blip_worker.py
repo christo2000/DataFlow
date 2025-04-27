@@ -5,12 +5,9 @@ from io import BytesIO
 from kafka import KafkaConsumer, KafkaProducer
 from kafka.admin import KafkaAdminClient, NewTopic
 import json
-from db_connection import Resources
-import records
-import db_connection
+from chatai.db_connection import Resources
+# Install vLLM from pip:
 
-import os
-import time
 # db_instance = records.Database('postgresql://postgres:postgres@localhost:5432/data_flow')
 data_resources = Resources(db_resource_url='postgresql://postgres:postgres@localhost:5432/data_flow')
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinning Dotted Circle</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+        }
+
+        .circle-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: spin 4s linear infinite;
+        }
+
+        .dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            animation: rotate 1.5s infinite linear;
+        }
+
+        .dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+        .dot:nth-child(2) { top: 14%; left: 86%; transform: translateX(-50%); }
+        .dot:nth-child(3) { top: 50%; left: 100%; transform: translateY(-50%) translateX(-100%); }
+        .dot:nth-child(4) { top: 86%; left: 86%; transform: translateX(-50%) translateY(-100%); }
+        .dot:nth-child(5) { top: 100%; left: 50%; transform: translateY(-100%) translateX(-50%); }
+        .dot:nth-child(6) { top: 86%; left: 14%; transform: translateX(-50%) translateY(100%); }
+        .dot:nth-child(7) { top: 50%; left: 0; transform: translateY(-50%) translateX(0); }
+        .dot:nth-child(8) { top: 14%; left: 14%; transform: translateX(-50%) translateY(0); }
+
+        /* Keyframe animation for spinning the circle */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Keyframe animation for rotating the dots */
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="circle-container">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+</body>
+</html>

@@ -8,8 +8,6 @@ class Resources:
 
     def resource_value_retrieval(self):
         db = records.Database(self.db_url)
-        rows = db.query("SELECT variable, value FROM resource_config;").all()
+        rows = db.query("SELECT variable, value FROM configs.resource_config;").all()
         map_resource_config_values = {row["variable"]:row["value"] for row in rows}
         return map_resource_config_values
-
-
